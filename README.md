@@ -12,6 +12,16 @@ All return data can be found in the folder data/, where there are two folders:
 
 The scripts and results are in the folder simple/
 
+Available models:
+
+  - Normal-Generalised Gamma-Pareto Process (gbfry in scripts)
+  - Generalized Gamma Process (gamma in scripts)
+  - Normal Stable (ns in scripts)
+  - Generalized hyperbolic (gh in scripts)
+  - Variance Gamma (vgamma4 for the parametrization og the ggp, vgamma3 for the parametrization of the gh)
+  - Normal Inverse-Gamma (nig in scripts)
+  - Student (student in scripts)
+
 ### Run the scripts
 
 1- Learning from train: You have to use the file run_iid.py to run a chain, which can be done from the terminal with the following line
@@ -52,16 +62,6 @@ Parameters:
 
      --thin 10, thinning, keep only every 10 samples of the parameters
      
-     
-Available models:
-
-  - Generalized BFRY (gbfry in scripts)
-  - Generalized Gamma Process (gamma in scripts)
-  - Normal Stable (ns in scripts)
-  - Generalized hyperbolic (gh in scripts)
-  - Variance Gamma (vgamma4 for the parametrization og the ggp, vgamma3 for the parametrization of the gh)
-  - Normal Inverse-Gamma (nig in scripts)
-  - Student (student in scripts)
   
 
 You can also simply run the command 
