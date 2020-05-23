@@ -1,5 +1,7 @@
 # ggp_dpl: The Normal-Generalised Gamma-Pareto process
-Code for the paper: "The Normal-Generalised Gamma-Pareto process: A novel pure-jump Levy process with flexible tail and jump-activity properties"
+Code for the paper: "The Normal-Generalised Gamma-Pareto process: A novel pure-jump Levy process with flexible tail and jump-activity properties". 
+
+This code buids on the Particles Library (https://github.com/nchopin/particles).
 
 ## Datasets:
 All return data can be found in the folder data/, where there are two folders:
