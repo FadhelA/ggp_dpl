@@ -5,18 +5,18 @@ import numpy as np
 import numpy.random as npr
 import particles.distributions as dists
 
-from gbfry import GGPsumrnd
+from gbfry import Gammasumrnd
 from utils import logit, sigmoid
 from iid_incr import IIDIncr
 
-class GGPSumDist(dists.ProbDist):
+class GammaSumDist(dists.ProbDist):
     def __init__(self, eta, sigma, c=1.0):
         self.eta = eta
         self.sigma = sigma
         self.c = c
 
     def rvs(self, size=1):
-        return GGPsumrnd(self.eta, self.sigma, self.c, size)
+        return Gammasumrnd(self.eta, self.sigma, self.c, size)
 
 class NIGIID(IIDIncr):
 
@@ -54,14 +54,14 @@ class NIGIID(IIDIncr):
         eta = np.exp(self.log_eta)*vol
         sigma = 0.5
         c = np.exp(self.log_c)
-        return GGPSumDist(eta, sigma, c)
+        return GammaSumDist(eta, sigma, c)
 
     def PX(self, t, xp):
         vol = self.get_volume(t)
         eta = np.exp(self.log_eta)*vol
         sigma = 0.5
         c = np.exp(self.log_c)
-        return GGPSumDist(eta, sigma, c)
+        return GammaSumDist(eta, sigma, c)
 
     @staticmethod
     def get_prior():

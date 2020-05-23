@@ -18,13 +18,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from gbfry_iid_incr import GBFRYIIDIncr
-from ggp_iid_incr import GGPIIDIncr
+from gamma_iid_incr import GammaIIDIncr
 from nig_iid import NIGIID
 from ns_iid_incr import NSIIDIncr
 from ghyperbolic_iid import GHDIIDIncr
-from vgamma_iid import VGammaIID
 from student_iid import StudentIIDIncr
-from vgamma2_iid import VGamma2IID
 from vgamma3_iid import VGamma3IID
 from vgamma4_iid import VGamma4IID
 
@@ -61,15 +59,11 @@ plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
 plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 if args.model == 'gamma':
-    ssm_cls = GGPIIDIncr
+    ssm_cls = GammaIIDIncr
 elif args.model == 'gbfry':
     ssm_cls = GBFRYIIDIncr
 elif args.model == 'ns':
     ssm_cls = NSIIDIncr
-elif args.model == 'vgamma':
-    ssm_cls = VGammaIID
-elif args.model == 'vgamma2':
-    ssm_cls = VGamma2IID
 elif args.model == 'vgamma3':
     mh_flag = True
     ssm_cls = VGamma3IID
@@ -168,42 +162,10 @@ with open(os.path.join(fig_dir, "ks_metrics.txt"), 'w') as logf:
     print(line)
     logf.write(line + '\n')
 
-    line = 'Test reweighted KS(pred_y, true_y): {:.4f}'.format(KS(pred_y_matrix.flatten(), true_y, reweighted=True))
-    print(line)
-    logf.write(line + '\n')
 
     line = 'Train KS(true_y, pred_y): {:.4f}'.format(KS(pred_y_matrix.flatten(), train_y))
     print(line)
     logf.write(line + '\n')
-
-    line = 'Train reweighted KS(pred_y, true_y): {:.4f}'.format(KS(pred_y_matrix.flatten(), train_y, reweighted=True))
-    print(line)
-    logf.write(line + '\n')
-    logf.write('\n')
-
-    line = "Var values: {}".format(var_values)
-    #print(line)
-    logf.write(line + '\n')
-    logf.write('\n')
-
-    line = 'True VaR: {}'.format(VaR(true_y, 1-var_values))
-    #print(line)
-    logf.write(line + '\n')
-    logf.write('\n')
-
-    line = 'Mean Estimated VaR: {}'.format(np.mean(pred_var, axis=0))
-    #print(line)
-    logf.write(line + '\n')
-    logf.write('\n')
-
-    var_cred = np.percentile(pred_var, [5, 95], axis=0)
-    line = '5% lower bound Estimated VaR: {}'.format(var_cred[0, :])
-    #print(line)
-    logf.write(line + '\n')
-    line = '95% lower bound Estimated VaR: {}'.format(var_cred[1, :])
-    #print(line)
-    logf.write(line + '\n')
-    logf.write('\n')
 
 # VaR log
 low_per = (100-args.credible_mass)/2
@@ -219,51 +181,6 @@ plt.fill_between(var_values, var_cred[0, :], var_cred[1, :], color='b', alpha=.2
 plt.legend()
 plt.tight_layout()
 plt.savefig(os.path.join(fig_dir, "Predicted_VaR_test.png"), bbox_inches='tight')
-plt.close('all')
-
-# VaR Linear
-low_per = (100-args.credible_mass)/2
-high_per = 100-low_per
-lin_var_cred = np.percentile(lin_pred_var, [5, 95], axis=0)
-var_true = VaR(true_y, lin_var_values)
-plt.figure('Predicted VaR')
-plt.title("Predictive VaR")
-plt.plot(lin_var_values, var_true, linewidth=1.5)
-plt.fill_between(lin_var_values, lin_var_cred[0, :], lin_var_cred[1, :], color='b', alpha=.2,
-                 label="{}% credible region".format(args.credible_mass))
-plt.legend()
-plt.tight_layout()
-plt.savefig(os.path.join(fig_dir, "Predicted_VaR_test_linear.png"), bbox_inches='tight')
-plt.close('all')
-
-# VaR Large
-low_per = (100-args.credible_mass)/2
-high_per = 100-low_per
-lin_var_cred = np.percentile(lin_pred_var, [5, 95], axis=0)
-var_true = VaR(true_y, lin_var_values)
-plt.figure('Predicted VaR')
-plt.title("Predictive VaR")
-plt.plot(lin_var_values[-20:], var_true[-20:], linewidth=1.5)
-plt.fill_between(lin_var_values[-20:], lin_var_cred[0, -20:], lin_var_cred[1, -20:], color='b', alpha=.2,
-                 label="{}% credible region".format(args.credible_mass))
-plt.legend()
-plt.tight_layout()
-plt.savefig(os.path.join(fig_dir, "Predicted_VaR_test_linear_large.png"), bbox_inches='tight')
-plt.close('all')
-
-# VaR Small
-low_per = (100-args.credible_mass)/2
-high_per = 100-low_per
-lin_var_cred = np.percentile(lin_pred_var, [5, 95], axis=0)
-var_true = VaR(true_y, lin_var_values)
-plt.figure('Predicted VaR')
-plt.title("Predictive VaR")
-plt.plot(lin_var_values[:20], var_true[:20], linewidth=1.5)
-plt.fill_between(lin_var_values[:20], lin_var_cred[0, :20], lin_var_cred[1, :20], color='b', alpha=.2,
-                 label="{}% credible region".format(args.credible_mass))
-plt.legend()
-plt.tight_layout()
-plt.savefig(os.path.join(fig_dir, "Predicted_VaR_test_linear_small.png"), bbox_inches='tight')
 plt.close('all')
 
 # Plot ordered y^2
@@ -284,110 +201,6 @@ plt.tight_layout()
 plt.savefig(os.path.join(fig_dir, "Posterior_predictive_ordered_y_square_test.png"), bbox_inches='tight')
 plt.close('all')
 
-# Plot ordered abs(y) on test
-low_per = (100-args.credible_mass)/2
-high_per = 100-low_per
-plt_range = int(95/100*T)
-abs_y_matrix = np.sort(np.abs(pred_y_matrix), axis=1)[:, ::-1]
-cred_region = np.percentile(abs_y_matrix, [low_per, high_per], axis=0)
-plt.figure('Ordered abs(y)')
-#plt.title("Posterior predictive of ordered abs(y)")
-plt.xlabel("Rank")
-plt.ylabel("|y|")
-plt.ylim(9.e-3, 2.e2)
-plt.loglog(range(plt_range), np.sort(np.abs(true_y))[::-1][:plt_range], linewidth=1.5)
-plt.fill_between(range(plt_range), cred_region[0,:plt_range], cred_region[1,:plt_range], color='b', alpha=.2,
-                 label="{}% credible region".format(args.credible_mass))
-plt.legend()
-plt.tight_layout()
-plt.savefig(os.path.join(fig_dir, "Posterior_predictive_ordered_abs_y_test.png"), bbox_inches='tight')
-plt.close('all')
-
-# Plot ordered abs(y) on test increasing order
-#low_per = (100-args.credible_mass)/2
-#high_per = 100-low_per
-#plt_range = T#int(95/100*T)
-#abs_y_matrix = np.sort(np.abs(pred_y_matrix), axis=1)
-#cred_region = np.percentile(abs_y_matrix, [low_per, high_per], axis=0)
-#plt.figure('Increasingly ordered abs(y)')
-#plt.title("Posterior predictive of increasingly ordered abs(y)")
-#plt.loglog(np.sort(np.abs(true_y))[:plt_range], linewidth=1.5)
-#plt.loglog(np.sort(np.abs(true_y)), linewidth=1.5)
-#print(np.sort(np.abs(true_y)))
-#plt.fill_between(range(plt_range), cred_region[0,:plt_range], cred_region[1,:plt_range], color='b', alpha=.2)
-#plt.legend()
-#plt.tight_layout()
-#plt.savefig(os.path.join(fig_dir, "Posterior_predictive_ordered_abs_y_test_increasingly.png"), bbox_inches='tight')
-#plt.close('all')
-
-# Plot ordered abs(y) on train
-low_per = (100-args.credible_mass)/2
-high_per = 100-low_per
-plt_range = len(train_y)
-abs_y_matrix = np.sort(np.abs(pred_y_matrix[:, :plt_range]), axis=1)[:, ::-1]
-cred_region = np.percentile(abs_y_matrix, [low_per, high_per], axis=0)
-plt.figure('Ordered abs(y)')
-#plt.title("Posterior predictive of ordered abs(y)")
-plt.xlabel("Rank")
-plt.ylabel("|y|")
-plt.ylim(1.e-5, 2.e2)
-plt.loglog(range(plt_range), np.sort(np.abs(train_y))[::-1], linewidth=1.5)
-plt.fill_between(range(plt_range), cred_region[0, :plt_range], cred_region[1,:plt_range], color='b', alpha=.2,
-                 label="{}% credible region".format(args.credible_mass))
-plt.legend()
-plt.tight_layout()
-plt.savefig(os.path.join(fig_dir, "Posterior_predictive_ordered_abs_y_train.png"), bbox_inches='tight')
-plt.close('all')
-
-# Plot log F(x) no zeros with skip
-low_per = (100-args.credible_mass)/2
-high_per = 100-low_per
-skip = 500
-x_array = np.sort(np.abs(true_y[true_y != 0]))
-p_0 = np.sum(true_y == 0)/len(true_y)
-print("Proportion of zeros = {}".format(p_0))
-print("Proportion of skipped = {}".format(skip/len(true_y)))
-len_x = len(x_array)
-prob_matrix = -np.log(np.array([ecdf(abs_y, x_array) for abs_y in abs_y_matrix]))
-cred_region = np.percentile(prob_matrix, [low_per, high_per], axis=0)
-plt.figure('cdf_tail')
-#plt.title("Posterior predictive of ordered abs(y)")
-plt.ylabel("-log(P(|Y| < x))")
-plt.xlabel("x")
-plt.ylim(-np.log(1-1/len_x), np.minimum(-np.log(p_0/10), 5))
-empirical_cdf = -np.log(p_0 + (1-p_0)*np.arange(1, len_x+1)/len_x)
-plt.loglog(x_array[skip:], empirical_cdf[skip:], linewidth=1.5, label="Empirical cdf")
-plt.fill_between(x_array[skip:], cred_region[0, skip:],  cred_region[1, skip:], color='b', alpha=.2,
-                 label="{}% credible region".format(args.credible_mass))
-plt.legend()
-plt.tight_layout()
-plt.savefig(os.path.join(fig_dir, "Posterior_cdf_abs_y_no_zero_skip.png"), bbox_inches='tight')
-plt.close('all')
-
-# Plot log F(x) no zeros no skip
-low_per = (100-args.credible_mass)/2
-high_per = 100-low_per
-skip = 0
-x_array = np.sort(np.abs(true_y[true_y != 0]))
-p_0 = np.sum(true_y == 0)/len(true_y)
-print("Proportion of zeros = {}".format(p_0))
-print("Proportion of skipped = {}".format(skip/len(true_y)))
-len_x = len(x_array)
-prob_matrix = -np.log(np.array([ecdf(abs_y, x_array) for abs_y in abs_y_matrix]))
-cred_region = np.percentile(prob_matrix, [low_per, high_per], axis=0)
-plt.figure('cdf_tail')
-#plt.title("Posterior predictive of ordered abs(y)")
-plt.ylabel("-log(P(|Y| < x))")
-plt.xlabel("x")
-plt.ylim(-np.log(1-1/len_x), np.minimum(-np.log(p_0/10), 5))
-empirical_cdf = -np.log(p_0 + (1-p_0)*np.arange(1, len_x+1)/len_x)
-plt.loglog(x_array[skip:], empirical_cdf[skip:], linewidth=1.5, label="Empirical cdf")
-plt.fill_between(x_array[skip:], cred_region[0, skip:],  cred_region[1, skip:], color='b', alpha=.2,
-                 label="{}% credible region".format(args.credible_mass))
-plt.legend()
-plt.tight_layout()
-plt.savefig(os.path.join(fig_dir, "Posterior_cdf_abs_y_no_zero_no_skip.png"), bbox_inches='tight')
-plt.close('all')
 
 # Plot log F(x) no zeros with skip of Y^2
 low_per = (100-args.credible_mass)/2
@@ -435,20 +248,6 @@ plt.tight_layout()
 plt.savefig(os.path.join(fig_dir, "Posterior_cdf_square_y_no_zero_no_skip.png"), bbox_inches='tight')
 plt.close('all')
 
-# Plot ordered abs(y) on train increasing order
-#low_per = (100-args.credible_mass)/2
-#high_per = 100-low_per
-#plt_range = len(train_y)
-#abs_y_matrix = np.sort(np.abs(pred_y_matrix[:, :plt_range]), axis=1)
-#cred_region = np.percentile(abs_y_matrix, [low_per, high_per], axis=0)
-#plt.figure('Increasingly ordered abs(y)')
-#plt.title("Posterior predictive of increasingly ordered abs(y)")
-#plt.loglog(range(plt_range), np.sort(np.abs(train_y)), linewidth=1.5)
-#plt.fill_between(range(plt_range), cred_region[0,:plt_range], cred_region[1, :plt_range], color='b', alpha=.2)
-#plt.legend()
-#plt.tight_layout()
-#plt.savefig(os.path.join(fig_dir, "Posterior_predictive_ordered_abs_y_train_increasing.png"), bbox_inches='tight')
-#plt.close('all')
 
 # Plot abs(y) log log
 n_bins = 100

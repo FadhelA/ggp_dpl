@@ -5,20 +5,20 @@ import numpy as np
 import numpy.random as npr
 import particles.distributions as dists
 
-from gbfry import GGPsumrnd
+from gbfry import Gammasumrnd
 from utils import logit, sigmoid
 from iid_incr import IIDIncr
 
-class GGPSumDist(dists.ProbDist):
+class GammaSumDist(dists.ProbDist):
     def __init__(self, eta, sigma, c=1.0):
         self.eta = eta
         self.sigma = sigma
         self.c = c
 
     def rvs(self, size=1):
-        return GGPsumrnd(self.eta, self.sigma, self.c, size)
+        return Gammasumrnd(self.eta, self.sigma, self.c, size)
 
-class GGPIIDIncr(IIDIncr):
+class GammaIIDIncr(IIDIncr):
 
     params_name = {
             'log_eta':'eta',
@@ -42,7 +42,7 @@ class GGPIIDIncr(IIDIncr):
                 logit_sigma=logit(0.2),
                 log_c = np.log(1.),
                 volumes=1.):
-        super(GGPIIDIncr, self).__init__(mu=mu, beta=beta)
+        super(GammaIIDIncr, self).__init__(mu=mu, beta=beta)
         self.log_eta = log_eta
         self.logit_sigma = logit_sigma
         self.log_c = log_c
@@ -59,14 +59,14 @@ class GGPIIDIncr(IIDIncr):
         eta = np.exp(self.log_eta)*vol
         sigma = sigmoid(self.logit_sigma)
         c = np.exp(self.log_c)
-        return GGPSumDist(eta, sigma, c)
+        return GammaSumDist(eta, sigma, c)
 
     def PX(self, t, xp):
         vol = self.get_volume(t)
         eta = np.exp(self.log_eta)*vol
         sigma = sigmoid(self.logit_sigma)
         c = np.exp(self.log_c)
-        return GGPSumDist(eta, sigma, c)
+        return GammaSumDist(eta, sigma, c)
 
     @staticmethod
     def get_prior():
@@ -77,7 +77,7 @@ class GGPIIDIncr(IIDIncr):
 
     @staticmethod
     def get_theta0(y):
-        prior = GGPIIDIncr.get_prior()
+        prior = GammaIIDIncr.get_prior()
         theta0 = prior.rvs()
         theta0['log_c'] = np.log(1.0) + 0.1*npr.randn()
         theta0['log_eta'] = np.log(1.0) + 0.1*npr.randn()

@@ -9,14 +9,12 @@ import os
 import pickle
 from scipy.stats.mstats import mquantiles
 
-from ggp_iid_incr import GGPIIDIncr
+from gamma_iid_incr import GammaIIDIncr
 from gbfry_iid_incr import GBFRYIIDIncr
 from nig_iid import NIGIID
 from ns_iid_incr import NSIIDIncr
 from ghyperbolic_iid import GHDIIDIncr
-from vgamma_iid import VGammaIID
 from student_iid import StudentIIDIncr
-from vgamma2_iid import VGamma2IID
 from vgamma3_iid import VGamma3IID
 from vgamma4_iid import VGamma4IID
 
@@ -32,15 +30,11 @@ parser.add_argument('--no_states', action='store_true')
 args = parser.parse_args()
 
 if args.model == 'gamma':
-    ssm_cls = GGPIIDIncr
+    ssm_cls = GammaIIDIncr
 elif args.model == 'gbfry':
     ssm_cls = GBFRYIIDIncr
 elif args.model == 'ns':
     ssm_cls = NSIIDIncr
-elif args.model == 'vgamma':
-    ssm_cls = VGammaIID
-elif args.model == 'vgamma2':
-    ssm_cls = VGamma2IID
 elif args.model == 'vgamma3':
     ssm_cls = VGamma3IID
 elif args.model == 'vgamma4':
