@@ -18,7 +18,7 @@ T = 1500
 T_test = 50000
 # Parameters of the IID student model
 params = {
-    "nu": 5.,
+    "nu": 4.,
 }
 
 # Directory where to save the generated data
