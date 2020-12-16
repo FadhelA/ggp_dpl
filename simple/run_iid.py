@@ -13,21 +13,19 @@ from mcmc import PMMH
 from particles.mcmc import BasicRWHM
 
 from nig_iid import NIGIID
-from ggp_iid_incr import GGPIIDIncr
+from gamma_iid_incr import GammaIIDIncr
 from ns_iid_incr import NSIIDIncr
 from gbfry_iid_incr import GBFRYIIDIncr
 from ghyperbolic_iid import GHDIIDIncr
 from student_iid import StudentIIDIncr
-from vgamma_iid import VGammaIID
-from vgamma2_iid import VGamma2IID
 from vgamma3_iid import VGamma3IID
 from vgamma4_iid import VGamma4IID
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--filename', type=str, default=None)
-parser.add_argument('--model', type=str, default='gbfry', choices=['gbfry', 'gamma', 'vgamma', 'nig', 'ns',
-                                                                   'ghd', 'student', 'vgamma2', 'vgamma3', 'vgamma4'])
+parser.add_argument('--model', type=str, default='gbfry', choices=['gbfry', 'gamma', 'nig', 'ns',
+                                                                   'ghd', 'student', 'vgamma3', 'vgamma4'])
 
 # for PMMH
 parser.add_argument('--save_states', action='store_true')
@@ -63,15 +61,11 @@ y = y / np.std(y) #W
 ssm_options = {}
 
 if args.model == 'gamma':
-    ssm_cls = GGPIIDIncr
+    ssm_cls = GammaIIDIncr
 elif args.model == 'gbfry':
     ssm_cls = GBFRYIIDIncr
 elif args.model == 'ns':
     ssm_cls = NSIIDIncr
-elif args.model == 'vgamma':
-    ssm_cls = VGammaIID
-elif args.model == 'vgamma2':
-    ssm_cls = VGamma2IID
 elif args.model == 'vgamma3':
     mh_flag = True
     ssm_cls = VGamma3IID

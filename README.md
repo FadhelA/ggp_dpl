@@ -1,12 +1,14 @@
 # ggp_dpl: The Normal-Generalised Gamma-Pareto process
-Code for the paper: "The Normal-Generalised Gamma-Pareto process: A novel pure-jump Levy process with flexible tail and jump-activity properties"
+Code for the paper: "The Normal-Generalised Gamma-Pareto process: A novel pure-jump Levy process with flexible tail and jump-activity properties". 
+
+This code buids on the Particles Library (https://github.com/nchopin/particles).
 
 ## Datasets:
 All return data can be found in the folder data/, where there are two folders:
 
   - data_minute_tech: Dataset composed of the time-series of the stock prices of six large technology companies: Apple (AAPL), Amazon (AMZN), Facebook (FB), Google (GOOG), Microsoft (MSFT) and Netflix (NFLX). The data are sampled every minute from the 10th of July 2019 until the 22nd of January 2020, with approximately 50,000 time points. We subsample 1500 observations as training data to estimate the parameters of each model, and use the rest of the observations as test data.
   
-  - oxford: Dataset obtained from the Realized library (https://realized.oxford-man.ox.ac.uk). We collected 14 daily stock data from 05-11-2011 to 07-10-2011 (around the time of subprime mortgage crisis)
+  - oxford: Dataset obtained from the Realized library (https://realized.oxford-man.ox.ac.uk). We collected 14 daily stock data from 05-11-2007 to 07-10-2011 (around the time of subprime mortgage crisis)
 
 ## IID Simple model
 
