@@ -5,7 +5,7 @@ import numpy as np
 import numpy.random as npr
 import particles.distributions as dists
 
-from gbfry import Gammasumrnd
+from gbfry import GGPsumrnd
 from utils import logit, sigmoid
 from iid_incr import IIDIncr
 
@@ -16,7 +16,7 @@ class GammaSumDist(dists.ProbDist):
         self.c = c
 
     def rvs(self, size=1):
-        return Gammasumrnd(self.eta, self.sigma, self.c, size)
+        return GGPsumrnd(self.eta, self.sigma, self.c, size)
 
 class NIGIID(IIDIncr):
 

@@ -6,7 +6,7 @@ import numpy as np
 import numpy.random as npr
 import particles.distributions as dists
 
-from gbfry import Gammasumrnd
+from gbfry import GGPsumrnd
 from utils import logit, sigmoid
 from iid_incr import IIDIncr
 
