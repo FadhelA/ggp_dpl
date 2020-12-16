@@ -26,7 +26,7 @@ save_dir = "../data/simulated/"
 
 # Simulate y from model
 theta = {
-            'log_nu':np.log(params['nu'])
+            'log_half_nu_minus_one':np.log(params['nu']/2-1)
 }
 
 model = StudentIIDIncr(**theta)
