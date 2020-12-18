@@ -18,7 +18,7 @@ T = 1500
 T_test = 50000
 # Parameters of the IID Generalized hyperbolic distribution model
 params = {
-    "lam": -2.,
+    "lam": -6.,
     "alpha": 0.5,
     "delta": 0.75
 }
