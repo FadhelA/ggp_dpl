@@ -84,7 +84,7 @@ class GBFRYIIDIncr(IIDIncr):
     def get_prior():
         prior_dict = {
             'log_eta': dists.LogD(dists.Gamma(a=.1, b=.1)), #W
-            'log_tau_minus_one': dists.LogD(dists.Gamma(a=1., b=1.)),#W
+            'log_tau_minus_one': dists.LogD(dists.Uniform(a=0., b=4.)),#W
             'logit_sigma': dists.LogitD(dists.Beta(a=1., b=1.)),
             'log_c': dists.LogD(dists.Gamma(a=.1, b=.1))#W
         }
