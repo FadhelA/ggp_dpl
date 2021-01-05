@@ -78,5 +78,11 @@ for key in keys:
         gathered[params].append(np.array(val))
         c_id += 1
 
-with open(os.path.join(save_dir, args.save_name, ".pkl"), 'wb') as handle:
+if not os.path.isdir(os.path.join(save_dir, args.save_name)):
+        os.makedirs(os.path.join(save_dir, args.save_name))
+
+with open(os.path.join(save_dir, args.save_name, "params.pkl"), 'wb') as handle:
     pickle.dump(gathered, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+
